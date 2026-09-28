@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_theme.dart';
-
 class MovieItem {
   const MovieItem({
     required this.title,
@@ -9,96 +7,141 @@ class MovieItem {
     required this.year,
     this.rating = 0.0,
     this.description = 'Film pilihan Javix Cinema.',
+    this.posterUrl = '',
+    this.streamUrl = '',
+    this.id = 0,
   });
 
+  final int id;
   final String title;
   final String genre;
   final int year;
   final double rating;
   final String description;
+  final String posterUrl;
+  final String streamUrl;
 }
 
 class CinematicCard extends StatelessWidget {
   const CinematicCard({
     super.key,
     required this.movie,
-    required this.onTap,
-    this.compact = false,
+    this.onTap,
   });
 
   final MovieItem movie;
-  final VoidCallback onTap;
-  final bool compact;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: compact ? 150 : 174,
-      child: Material(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 155,
+        margin: const EdgeInsets.only(right: 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: const Color(0xFF1D8BFF).withOpacity(0.35),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF007BFF).withOpacity(0.16),
+              blurRadius: 14,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
         clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFF164E70), Color(0xFF07101D)],
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        const Center(
-                          child: Icon(Icons.movie_creation_outlined, size: 42, color: AppTheme.primaryBright),
-                        ),
-                        Positioned(
-                          left: 9,
-                          bottom: 8,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.55),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text('${movie.year}', style: const TextStyle(fontSize: 11)),
-                          ),
-                        ),
-                      ],
-                    ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: movie.posterUrl.isNotEmpty
+                  ? Image.network(
+                      movie.posterUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => _placeholder(),
+                    )
+                  : _placeholder(),
+            ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.15),
+                      Colors.black.withOpacity(0.92),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  movie.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.star_rounded, size: 14, color: AppTheme.primaryBright),
-                    const SizedBox(width: 3),
-                    Text(movie.rating.toStringAsFixed(1), style: const TextStyle(color: AppTheme.textMuted, fontSize: 12)),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(movie.genre, overflow: TextOverflow.ellipsis, style: const TextStyle(color: AppTheme.textMuted, fontSize: 12)),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    movie.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '${movie.year} • ${movie.genre}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.72),
+                      fontSize: 11,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: Color(0xFF55B8FF),
+                        size: 15,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        movie.rating.toStringAsFixed(1),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      color: const Color(0xFF081426),
+      child: const Center(
+        child: Icon(
+          Icons.movie_creation_outlined,
+          color: Color(0xFF1D8BFF),
+          size: 42,
         ),
       ),
     );
