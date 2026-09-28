@@ -34,7 +34,7 @@ class _PlayerState extends State<PlayerScreen>{
   @override void dispose(){c.dispose();super.dispose();}
 
   @override Widget build(BuildContext x){
-    if(!c.value.isInitialized)return const Scaffold(
+            if(s!=null){await c.setPlaybackSpeed(s);setState((){speed=s;});}
       backgroundColor:Color(0xFF050A14),
       body:Center(child:CircularProgressIndicator()));
     return Scaffold(
