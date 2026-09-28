@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               rating: double.tryParse('${m['rating'] ?? 0}') ?? 0,
               description: '${m['description'] ?? 'Film pilihan Javix Cinema.'}',
               posterUrl: '${m['poster'] ?? m['posterUrl'] ?? m['poster_url'] ?? ''}',
-              streamUrl: '${m['streamUrl'] ?? m['stream_url'] ?? ''}',
+              streamUrl: '${m['streamUrl'] ?? m['stream_url'] ?? (m['stream'] is Map ? (m['stream']['url'] ?? '') : '')}',
             );
           })
           .toList();
