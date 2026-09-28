@@ -22,6 +22,37 @@ jobs:
       - name: Generate Android project
         run: flutter create . --platforms=android --org com.javix --project-name javix_cinema
 
+      - name: Allow local HTTP API
+        run: |
+          python3 - <<'PY'
+          path = "android/app/src/main/AndroidManifest.xml"
+
+          with open(path, "r", encoding="utf-8") as f:
+              text = f.read()
+
+          if "android.permission.INTERNET" not in text:
+              text = text.replace(
+                  '<manifest ',
+                  '<manifest ',
+                  1
+              )
+              marker = '>'
+              pos = text.find(marker)
+              text = text[:pos + 1] + '\n    <uses-permission android:name="android.permission.INTERNET"/>' + text[pos + 1:]
+
+          if "android:usesCleartextTraffic" not in text:
+              text = text.replace(
+                  "<application ",
+                  '<application android:usesCleartextTraffic="true" ',
+                  1
+              )
+
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(text)
+
+          print("Android HTTP API access enabled")
+          PY
+
       - name: Remove generated Flutter test
         run: rm -f test/widget_test.dart
 
