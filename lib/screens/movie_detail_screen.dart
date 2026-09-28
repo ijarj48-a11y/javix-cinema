@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/cinematic_card.dart';
 import 'player_screen.dart';
+import 'player_screen.dart';
 
 class MovieDetailScreen extends StatelessWidget {
   const MovieDetailScreen({super.key, required this.movie});
