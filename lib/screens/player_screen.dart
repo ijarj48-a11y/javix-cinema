@@ -34,7 +34,7 @@ class _PlayerState extends State<PlayerScreen>{
   @override void dispose(){c.dispose();super.dispose();}
 
   @override Widget build(BuildContext x){
-            if(s!=null){await c.setPlaybackSpeed(s);setState((){speed=s;});}
+    if(!c.value.isInitialized)return const Scaffold(
       backgroundColor:Color(0xFF050A14),
       body:Center(child:CircularProgressIndicator()));
     return Scaffold(
@@ -66,7 +66,7 @@ class _PlayerState extends State<PlayerScreen>{
                 children:[for(final v in [.5,.75,1,1.25,1.5,2])
                   ListTile(title:Text('${v}x',style:const TextStyle(color:Colors.white)),
                     onTap:()=>Navigator.pop(x,v))]));
-            if(s!=null){await c.setPlaybackSpeed(s);setState(()=>speed=s);}
+            if(s!=null){await c.setPlaybackSpeed(s);setState((){speed=s;});}
           },icon:const Icon(Icons.speed,color:Colors.white)),
           IconButton(iconSize:52,onPressed:(){
             c.value.isPlaying?c.pause():c.play();setState((){});
