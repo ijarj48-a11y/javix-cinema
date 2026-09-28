@@ -23,6 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   String? _error;
   List<MovieItem> _movies = [];
+  final List<MovieItem> _upcoming = [
+    MovieItem(title:'Akan Hadir 1', genre:'Adventure', year:2026),
+    MovieItem(title:'Akan Hadir 2', genre:'Animation', year:2026),
+    MovieItem(title:'Akan Hadir 3', genre:'Horror', year:2026),
+  ];
 
   static const api = 'http://127.0.0.1:3000';
 
@@ -421,3 +426,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+  Widget _upcomingList() {
+    if (_upcoming.isEmpty) {
+      return const SizedBox(
+        height: 120,
+        child: Center(
+          child: Text(
+            'Belum ada film yang akan hadir.',
+            style: TextStyle(color: AppTheme.textMuted),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 250,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _upcoming.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
+        itemBuilder: (_, i) {
+          final movie = _upcoming[i];
+          return CinematicCard(
+            movie: movie,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MovieDetailScreen(movie: movie),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
