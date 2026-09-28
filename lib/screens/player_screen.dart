@@ -28,6 +28,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _controller.initialize().then((_) {
       if (!mounted) return;
       setState(() => _ready = true);
+      _controller.play();
     }).catchError((e) {
       if (!mounted) return;
       setState(() => _error = e.toString());
