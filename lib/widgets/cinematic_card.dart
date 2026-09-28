@@ -42,11 +42,11 @@ class CinematicCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: const Color(0xFF1D8BFF).withOpacity(0.35),
+            color: const Color(0xFF1D8BFF).withValues(alpha: 0.35),
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF007BFF).withOpacity(0.16),
+              color: const Color(0xFF007BFF).withValues(alpha: 0.16),
               blurRadius: 14,
               spreadRadius: 1,
             ),
@@ -72,8 +72,8 @@ class CinematicCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withOpacity(0.15),
-                      Colors.black.withOpacity(0.92),
+                      Colors.black.withValues(alpha: 0.15),
+                      Colors.black.withValues(alpha: 0.92),
                     ],
                   ),
                 ),
@@ -102,7 +102,7 @@ class CinematicCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.72),
+                      color: Colors.white.withValues(alpha: 0.72),
                       fontSize: 11,
                     ),
                   ),

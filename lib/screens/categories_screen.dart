@@ -35,7 +35,6 @@ class CategoriesScreen extends StatelessWidget {
                       final movie = items[index];
                       return CinematicCard(
                         movie: movie,
-                        compact: true,
                         onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => MovieDetailScreen(movie: movie))),
                       );
                     },
