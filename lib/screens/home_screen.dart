@@ -144,6 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 10),
               _movieList(),
               const SizedBox(height: 25),
+              _title('🍿 Akan Hadir'),
+              const SizedBox(height: 10),
+              _upcomingList(),
+              const SizedBox(height: 25),
               _title('Genre'),
               const SizedBox(height: 10),
               _genres(),
@@ -394,38 +398,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _genres() {
-    final genres = <String>{};
-
-    for (final movie in _movies) {
-      genres.addAll(
-        movie.genre
-            .split(' • ')
-            .where((g) => g.trim().isNotEmpty),
-      );
-    }
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: genres.map((genre) {
-        return ActionChip(
-          label: Text(genre),
-          backgroundColor: AppTheme.surfaceSoft,
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => FilmsScreen(
-                movies: _movies,
-                initialQuery: genre,
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
 
   Widget _upcomingList() {
     if (_upcoming.isEmpty) {
@@ -461,3 +433,37 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget _genres() {
+    final genres = <String>{};
+
+    for (final movie in _movies) {
+      genres.addAll(
+        movie.genre
+            .split(' • ')
+            .where((g) => g.trim().isNotEmpty),
+      );
+    }
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: genres.map((genre) {
+        return ActionChip(
+          label: Text(genre),
+          backgroundColor: AppTheme.surfaceSoft,
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => FilmsScreen(
+                movies: _movies,
+                initialQuery: genre,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
