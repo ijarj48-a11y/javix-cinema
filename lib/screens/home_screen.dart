@@ -258,12 +258,22 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _topBar() {
     return Row(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Image.asset(
-            'assets/images/javix_logo.png',
-            width: 52,
-            height: 52,
+        Container(
+          width: 52,
+          height: 52,
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: AppTheme.primary.withValues(alpha: .30),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(13),
+            child: Image.asset(
+              'assets/images/javix_logo.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const SizedBox(width: 12),
@@ -290,14 +300,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         const Spacer(),
-        IconButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const NotificationsScreen(),
+        Container(
+          decoration: BoxDecoration(
+            color: AppTheme.surfaceSoft,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: AppTheme.primary.withValues(alpha: .12),
             ),
           ),
-          icon: const Icon(Icons.notifications_none_rounded),
+          child: IconButton(
+            tooltip: 'Notifikasi',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const NotificationsScreen(),
+              ),
+            ),
+            icon: const Icon(Icons.notifications_none_rounded),
+          ),
         ),
       ],
     );
@@ -310,8 +330,9 @@ class _HomeScreenState extends State<HomeScreen> {
       onSubmitted: (_) => _openSearch(),
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search_rounded),
-        hintText: 'Cari film, aktor, atau genre...',
+        hintText: 'Cari film, genre, atau tahun...',
         suffixIcon: IconButton(
+          tooltip: 'Cari',
           onPressed: _openSearch,
           icon: const Icon(Icons.arrow_forward_rounded),
         ),
@@ -321,41 +342,72 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _hero() {
     return Container(
-      height: 235,
+      height: 245,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
         gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [
-            Color(0xFF16415F),
-            Color(0xFF07111F),
-            Color(0xFF050A14),
+            Color(0xFF123D5B),
+            Color(0xFF071525),
+            Color(0xFF030811),
           ],
         ),
         border: Border.all(
-          color: AppTheme.primary.withValues(alpha: .22),
+          color: AppTheme.primary.withValues(alpha: .28),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primary.withValues(alpha: .10),
+            blurRadius: 22,
+            spreadRadius: 1,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Text(
-            'JAVIX CINEMA',
-            style: TextStyle(
-              color: AppTheme.primaryBright,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 2,
-              fontSize: 12,
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 5,
+            ),
+            decoration: BoxDecoration(
+              color: AppTheme.primary.withValues(alpha: .14),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppTheme.primary.withValues(alpha: .28),
+              ),
+            ),
+            child: const Text(
+              'JAVIX ORIGINAL',
+              style: TextStyle(
+                color: AppTheme.primaryBright,
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.6,
+              ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           const Text(
             'Your next movie night\nstarts here.',
             style: TextStyle(
-              fontSize: 27,
-              height: 1.08,
+              fontSize: 28,
+              height: 1.05,
               fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Temukan film favoritmu dan nikmati malam film bersama Javix.',
+            style: TextStyle(
+              color: AppTheme.textMuted,
+              fontSize: 12,
+              height: 1.4,
             ),
           ),
           const SizedBox(height: 16),
@@ -377,6 +429,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _title(String title) {
     return Row(
       children: [
+        Container(
+          width: 4,
+          height: 22,
+          decoration: BoxDecoration(
+            color: AppTheme.primaryBright,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        const SizedBox(width: 9),
         Text(
           title,
           style: const TextStyle(
@@ -385,19 +446,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Spacer(),
-        TextButton(
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => FilmsScreen(movies: _movies),
+        if (title == 'Trending sekarang')
+          TextButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => FilmsScreen(movies: _movies),
+              ),
             ),
+            child: const Text('Lihat semua'),
           ),
-          child: const Text('Lihat semua'),
-        ),
       ],
     );
   }
-
 
   Widget _upcomingList() {
     if (_upcoming.isEmpty) {
@@ -420,12 +481,13 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemBuilder: (_, i) {
           final movie = _upcoming[i];
-          return CinematicCard(
-            movie: movie,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MovieDetailScreen(movie: movie),
+
+          return Opacity(
+            opacity: .48,
+            child: IgnorePointer(
+              child: CinematicCard(
+                movie: movie,
+                onTap: () {},
               ),
             ),
           );
